@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import { Text, View, Image, Linking } from 'react-native';
+import { Font } from 'expo';
 import Card from './Card';
 import CardSection from './CardSection';
 import Button from './Button';
@@ -11,7 +12,7 @@ const spotifyWebAPI = new Spotify();
 
 
 // Define a component
-class AlbumDetail extends Component {
+export default class AlbumDetail extends Component {
     constructor() {
         super();
 
@@ -30,26 +31,12 @@ class AlbumDetail extends Component {
                 url: ''
             }
         };
-
-/*        if (params.access_token) {
-            spotifyWebAPI.setAccessToken(params.access_token);
-        }*/
     }
 
     componentDidMount() {
         this.fetchAlbum();
         this.fetchArtist();
     }
-
-/*    getHashParams() {
-        const hashParams = {};
-        let e; const r = /([^&;=]+)=?([^&;]*)/g;
-            const q = window.location.hash.substring(1);
-        while (e = r.exec(q)) {
-            hashParams[e[1]] = decodeURIComponent(e[2]);
-      }
-      return hashParams;
-    }*/
 
     fetchAlbum() {
         spotifyWebAPI.getAlbum('4ohPMPeZukCChC6xNJpeYx')
@@ -140,11 +127,11 @@ const styles = {
     },
     headerTextStyle: {
         fontSize: 18,
-        fontFamily: 'Aileron-SemiBold',
+        // fontFamily: 'Aileron-SemiBold',
         color: '#fff',
     },
     artistTextStyle: {
-        fontFamily: 'Aileron-Light',
+        // fontFamily: 'Aileron-Light',
         color: '#fff'
     },
     thumbnailStyle: {
@@ -171,6 +158,3 @@ const styles = {
         marginTop: 37
     }
 };
-
-// Make the component available to other parts of app
-export default AlbumDetail;

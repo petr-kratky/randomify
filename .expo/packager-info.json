@@ -2,9 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 6600,
-  "expoServerNgrokUrl": "https://wu-nay.anonymous.randomify.exp.direct",
-  "packagerNgrokUrl": "https://packager.wu-nay.anonymous.randomify.exp.direct",
-  "ngrokPid": 16400,
+  "packagerPid": 14660,
+  "expoServerNgrokUrl": "https://wu-nay.kratky-pete.randomify.exp.direct",
+  "packagerNgrokUrl": "https://packager.wu-nay.kratky-pete.randomify.exp.direct",
+  "ngrokPid": 17924,
   "webpackServerPort": null
 }

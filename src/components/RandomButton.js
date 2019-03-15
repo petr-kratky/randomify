@@ -16,7 +16,7 @@ const RandomButton = ({ buttonText, whenPressed }) => {
 
 const styles = {
   textStyle: {
-      fontFamily: 'Aileron-Black',
+      // fontFamily: 'Aileron-Black',
       fontSize: 47,
       color: '#20C778',
       textShadowColor: '#fff',

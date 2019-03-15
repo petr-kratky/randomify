@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
+import { Font } from 'expo';
 
 const Button = ({ whenPressed, children }) => {
     const { buttonStyle, textStyle } = styles;
@@ -27,7 +28,7 @@ const styles = {
     },
     textStyle: {
         alignSelf: 'center',
-        fontFamily: 'Aileron-Bold',
+        // fontFamily: 'Aileron-Bold',
         color: '#fff',
         fontSize: 17,
         fontWeight: '600',
