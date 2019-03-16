@@ -188,7 +188,6 @@ export default class AlbumDetail extends Component {
     */
 
     fetchArtist() {
-        console.log('artistID_fetchArtist(): ' + this.state.album.artistID);
         sp.getArtist(this.state.album.artistID)
             .then((response) => {
                 this.setState({ artist: {
