@@ -127,7 +127,7 @@ export default class AlbumDetail extends Component {
         generate random number from 0 to maxNum
     */
 
-    randomNum(maxNum) {
+    static randomNum(maxNum) {
         return Math.floor(Math.random() * maxNum);
     }
 
@@ -136,9 +136,9 @@ export default class AlbumDetail extends Component {
         picks a random character from a-z/0-9 for spotify api search query
     */
 
-    randomChar() {
+    static randomChar() {
         const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        return chars.charAt(this.randomNum(chars.length));
+        return chars.charAt(AlbumDetail.randomNum(chars.length));
     };
 
     /*
@@ -150,8 +150,8 @@ export default class AlbumDetail extends Component {
     */
 
     fetchRandomAlbum = async() => {
-        const offset = this.randomNum(10000);
-        await sp.searchAlbums(this.randomChar(), {limit: 1, offset: offset, market: 'CZ'})
+        const offset = AlbumDetail.randomNum(10000);
+        await sp.searchAlbums(AlbumDetail.randomChar(), {limit: 1, offset: offset, market: 'CZ'})
             .then((response) => {
                 this.setState({ album: {
                     id: response.albums.items[0].id,
