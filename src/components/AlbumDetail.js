@@ -188,9 +188,6 @@ export default class AlbumDetail extends Component {
                         <Button whenPressed={() => { Linking.openURL(album.url); }}>
                             Listen on Spotify
                         </Button>
-                        <Button whenPressed={() => { Linking.openURL('http://3.17.71.163:8080/'); }}>
-                            Login to Spotify
-                        </Button>
                     </CardSection>
                 </Card>
                 <View style={randomButtonStyle}>
