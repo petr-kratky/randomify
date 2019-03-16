@@ -1,15 +1,16 @@
 // Import libs
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Spotify from 'spotify-web-api-js';
-import { Text, View, Image, Linking } from 'react-native';
-import { Font } from 'expo';
+import {Image, Linking, Text, View} from 'react-native';
+import axios from 'axios';
+import { AuthSession } from 'expo';
+import { encode as btoa } from 'base-64'
 import Card from './Card';
 import CardSection from './CardSection';
 import Button from './Button';
 import RandomButton from './RandomButton';
 
-const spotifyWebAPI = new Spotify();
-
+const sp = new Spotify();
 
 // Define a component
 export default class AlbumDetail extends Component {
@@ -19,43 +20,125 @@ export default class AlbumDetail extends Component {
         this.setState = this.setState.bind(this);
         this.fetchAlbum = this.fetchAlbum.bind(this);
         this.fetchArtist = this.fetchArtist.bind(this);
+        this.getTokens = this.getTokens.bind(this);
 
         this.state = {
-/*            loggedIn: !!params.access_token,*/
+            tokens: {
+                accessToken: 'no_access_token',
+                refreshToken: 'no_refresh_token',
+                expiresIn: 'no_expire_time'
+            },
             album: {
-                name: '',
-                artist: '',
-                artistID: '',
-                image: '',
-                thumbnail: '',
-                url: ''
+                name: 'album_name',
+                artist: 'artist_name',
+                artistID: 'artist_ID',
+                image: 'image_URL',
+                url: 'album_URL'
+            },
+            artist: {
+                thumbnail: 'thumbnail_URL'
             }
         };
     }
 
+    getAuthorizationCode = async () => {
+        try {
+            let result;
+            const redirectUrl = 'https://auth.expo.io/@kratky.pete/randomify';
+            const clientID = '8a352836ac464579ab2e790ee597a703';
+            const scopes = 'user-modify-playback-state';
+            result = await AuthSession.startAsync({
+              authUrl:
+                'https://accounts.spotify.com/authorize' +
+                '?response_type=code' +
+                '&client_id=' +
+                clientID +
+                (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+                '&redirect_uri=' +
+                encodeURIComponent(redirectUrl),
+            });
+            return result.params.code;
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+
+    getTokens = async () => {
+      try {
+        const authorizationCode = await this.getAuthorizationCode();
+        console.log('Authorization Code: ' + authorizationCode);
+
+        const credentials = {
+            clientId: '8a352836ac464579ab2e790ee597a703',
+            clientSecret: 'ae0d353236ff4dd780b32670fb55f97a',
+            redirectUri: 'https://auth.expo.io/@kratky.pete/randomify'
+        };
+        const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
+        const response = await fetch('https://accounts.spotify.com/api/token', {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${credsB64}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${
+            credentials.redirectUri
+          }`,
+        });
+        const responseJson = await response.json();
+
+        const {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          expires_in: expiresIn,
+        } = responseJson;
+
+        console.log('Access Token: ' + accessToken);
+
+        this.setState({tokens: {
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                expiresIn: expiresIn
+            }});
+
+        console.log('tokens.accessToken: ' + this.state.tokens.accessToken)
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     componentDidMount() {
-        this.fetchAlbum();
-        this.fetchArtist();
+        this.getTokens()
+            .then(() => {
+                sp.setAccessToken(this.state.tokens.accessToken);
+                console.log('sp.accessToken: ' + sp.getAccessToken());
+                this.fetchAlbum().then(() => {
+                    this.fetchArtist();
+                });
+            })
     }
 
-    fetchAlbum() {
-        spotifyWebAPI.getAlbum('4ohPMPeZukCChC6xNJpeYx')
+    fetchAlbum = async() => {
+        await sp.getAlbum('4ohPMPeZukCChC6xNJpeYx')
             .then((response) => {
-                this.state.artistID = response.artists[0].id;
                 this.setState({ album: {
                         name: response.name,
-                        artist: response.artists[0].name,
+                        url: response.href,
                         image: response.images[0].url,
-                        url: response.href
+                        artist: response.artists[0].name,
+                        artistID: response.artists[0].id
                     }
                 });
+                console.log('artistID_getAlbum(): ' + this.state.album.artistID);
             });
-    }
+    };
 
     fetchArtist() {
-        spotifyWebAPI.getArtist(this.state.album.artistID)
+        console.log('artistID_fetchArtist(): ' + this.state.album.artistID);
+        sp.getArtist(this.state.album.artistID)
             .then((response) => {
-                this.setState({ album: {
+                this.setState({ artist: {
                         thumbnail: response.images[0].url
                     }
                 });
@@ -64,6 +147,7 @@ export default class AlbumDetail extends Component {
 
     render() {
         const album = this.state.album;
+        const artist = this.state.artist;
 
         const {
             thumbnailStyle,
@@ -86,11 +170,11 @@ export default class AlbumDetail extends Component {
                         <View style={thumbnailContainerStyle}>
                             <Image
                                 style={thumbnailStyle}
-                                source={{ uri: album.thumbnail }}
+                                source={{ uri: artist.thumbnail }}
                             />
                         </View>
                         <View style={headerContentStyle}>
-                            <Text style={headerTextStyle}>{album.name.toUpperCase()}</Text>
+                            <Text style={headerTextStyle}>{album.name}</Text>
                             <Text style={artistTextStyle}>{album.artist}</Text>
                         </View>
                     </CardSection>
