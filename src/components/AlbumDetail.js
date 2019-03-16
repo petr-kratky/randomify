@@ -16,11 +16,6 @@ export default class AlbumDetail extends Component {
     constructor() {
         super();
 
-        this.setState = this.setState.bind(this);
-        this.fetchAlbum = this.fetchAlbum.bind(this);
-        this.fetchArtist = this.fetchArtist.bind(this);
-        this.getTokens = this.getTokens.bind(this);
-
         this.state = {
             tokens: {
                 accessToken: 'no_access_token',
