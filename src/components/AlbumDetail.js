@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import Spotify from 'spotify-web-api-js';
 import {Image, Linking, Text, View} from 'react-native';
-import axios from 'axios';
 import { AuthSession } from 'expo';
 import { encode as btoa } from 'base-64'
 import Card from './Card';
@@ -113,18 +112,28 @@ export default class AlbumDetail extends Component {
             .then(() => {
                 sp.setAccessToken(this.state.tokens.accessToken);
                 console.log('sp.accessToken: ' + sp.getAccessToken());
-                this.fetchAlbum().then(() => {
-                    this.fetchArtist();
-                });
+                this.fetchAlbum()
+                    .then(() => {
+                        this.fetchArtist();
+                    });
             })
     }
 
+    randomNum(maxNum) {
+        return Math.floor(Math.random() * maxNum);
+    }
+
+    randomChar() {
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        return chars.charAt(this.randomNum(chars.length));
+    };
+
     fetchAlbum = async() => {
-        await sp.getAlbum('4ohPMPeZukCChC6xNJpeYx')
+        await sp.getAlbum('2FUsvD1bw53HGOjAg56vRD')
             .then((response) => {
                 this.setState({ album: {
                         name: response.name,
-                        url: response.href,
+                        url: response.uri,
                         image: response.images[0].url,
                         artist: response.artists[0].name,
                         artistID: response.artists[0].id
@@ -187,6 +196,9 @@ export default class AlbumDetail extends Component {
                     <CardSection>
                         <Button whenPressed={() => { Linking.openURL(album.url); }}>
                             Listen on Spotify
+                        </Button>
+                        <Button whenPressed={() => { console.log(this.randomChar()) }} >
+                            debug button
                         </Button>
                     </CardSection>
                 </Card>
