@@ -9,18 +9,17 @@ import CardSection from './CardSection';
 import Button from './Button';
 import RandomButton from './RandomButton';
 
-const sp = new Spotify();
+const sp = new Spotify(); // create new spotify api session, later used to make calls
 
-// Define a component
 export default class AlbumDetail extends Component {
     constructor() {
         super();
 
         this.state = {
             tokens: {
-                accessToken: 'no_access_token',
-                refreshToken: 'no_refresh_token',
-                expiresIn: 'no_expire_time'
+                accessToken: 'no_access_token', // access token required by api calls
+                refreshToken: 'no_refresh_token', // token to refresh (obtain new) access token wo user interference
+                expiresIn: 'no_expire_time' // expiry time for the access token (6 minutes)
             },
             album: {
                 id: 'album_id',
@@ -36,12 +35,25 @@ export default class AlbumDetail extends Component {
         };
     }
 
+    /*
+    @getAuthorizationCode:
+        requests auth code from spotify api using application credentials
+        launches auth session for the user to grant randomify access to their account
+        returns @result.params.code (auth_code from the session)
+
+        @redirectUrl: url where user will be redirected after session is complete
+        @clientID: randomify application ID
+        @scopes: list of rights the user grants to the app; none are required for search api endpoint
+    */
+
+    // TODO: securely store login credentials on backend and request them via API call
+
     getAuthorizationCode = async () => {
         try {
             let result;
             const redirectUrl = 'https://auth.expo.io/@kratky.pete/randomify';
             const clientID = '8a352836ac464579ab2e790ee597a703';
-            const scopes = 'user-modify-playback-state user-library-read';
+            const scopes = ''; //
             result = await AuthSession.startAsync({
               authUrl:
                 'https://accounts.spotify.com/authorize' +
@@ -58,11 +70,22 @@ export default class AlbumDetail extends Component {
         }
     };
 
+    /*
+    @getTokens:
+        uses auth_code from @getAuthorizationCode() to request access_token required by api calls
+        stores obtained tokens (access_token, refresh_token) and access token's expire time in 'tokens' state
+
+        @authorizationCode: auth_code from auth session
+        @credentials: randomify's application credentials
+        @credsB64: base64-encoded string with credentials
+        @responseJson: response from the request stored in .json format
+    */
+
+    // TODO: use refresh_token to obtain new access_token automatically once expired
 
     getTokens = async () => {
       try {
         const authorizationCode = await this.getAuthorizationCode();
-        console.log('Authorization Code: ' + authorizationCode);
 
         const credentials = {
             clientId: '8a352836ac464579ab2e790ee597a703',
@@ -88,39 +111,48 @@ export default class AlbumDetail extends Component {
           expires_in: expiresIn,
         } = responseJson;
 
-        console.log('Access Token: ' + accessToken);
-
         this.setState({tokens: {
                 accessToken: accessToken,
                 refreshToken: refreshToken,
                 expiresIn: expiresIn
             }});
 
-        console.log('tokens.accessToken: ' + this.state.tokens.accessToken)
-
       } catch (err) {
         console.error(err);
       }
     };
 
+    /*
+    @randomNum:
+        generate random number from 0 to maxNum
+    */
 
-    // generate random number from 0 to maxNum
     randomNum(maxNum) {
         return Math.floor(Math.random() * maxNum);
     }
 
-    // picks a random character from a-z/0-9 for api search query
+    /*
+    @randomChar:
+        picks a random character from a-z/0-9 for spotify api search query
+    */
+
     randomChar() {
         const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
         return chars.charAt(this.randomNum(chars.length));
     };
 
+    /*
+    @fetchRandomAlbum:
+         fetches random album from spotify api
+         generates random offset; spotify api will then return an album from search query based on that offset number
+         fetches 1 album (limit: 1) from the search query of 10000 albums (offset: 0-10000))
+         updates current state with new fetched album id
+    */
 
     fetchRandomAlbum = async() => {
         const offset = this.randomNum(10000);
         await sp.searchAlbums(this.randomChar(), {limit: 1, offset: offset, market: 'CZ'})
             .then((response) => {
-                console.log('RandomAlbumID:' + response.albums.items[0].id);
                 this.setState({ album: {
                     id: response.albums.items[0].id,
                     }
@@ -128,6 +160,11 @@ export default class AlbumDetail extends Component {
             });
         };
 
+    /*
+    @fetchAlbum:
+        fetches details of previously obtained album from @fetchRandomAlbum()
+        updates current state with the fetched details
+    */
 
     fetchAlbum = async() => {
         await sp.getAlbum(this.state.album.id)
@@ -140,9 +177,15 @@ export default class AlbumDetail extends Component {
                         artistID: response.artists[0].id
                     }
                 });
-                console.log('artistID_getAlbum(): ' + this.state.album.artistID);
             });
     };
+
+    /*
+    @fetchArtist:
+        fetches details about the album's artist
+        requires @fetchAlbum() to first update current state with artistID
+        then updates 'artist' state with artist thumbnail img url
+    */
 
     fetchArtist() {
         console.log('artistID_fetchArtist(): ' + this.state.album.artistID);
@@ -155,7 +198,12 @@ export default class AlbumDetail extends Component {
             });
     }
 
-    // load new random album onto screen
+    /*
+    @refreshAlbum:
+        calls above-defined spotify api calls to generate a new random album onto screen
+        also called by the 'RANDOMIFY' button
+    */
+
     refreshAlbum() {
         this.fetchRandomAlbum()
             .then(() => {
@@ -166,13 +214,17 @@ export default class AlbumDetail extends Component {
             });
     }
 
+    /*
+    @componentDidMount:
+        requests access token for spotify api requests upon App launch via @getTokens()
+        set access token for active spotify api session (active for 6 minutes)
+        load first random album on app launch
+    */
+
     componentDidMount() {
-        // request new access token upon app launch
         this.getTokens()
             .then(() => {
-                // set access token for active spotify api session (active for 6 minutes)
                 sp.setAccessToken(this.state.tokens.accessToken);
-                // load first random album on app launch
                 this.refreshAlbum();
             })
     }
