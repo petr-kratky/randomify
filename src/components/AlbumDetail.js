@@ -28,9 +28,10 @@ export default class AlbumDetail extends Component {
                 expiresIn: 'no_expire_time'
             },
             album: {
+                id: 'album_id',
                 name: 'album_name',
                 artist: 'artist_name',
-                artistID: 'artist_ID',
+                artistID: 'artist_id',
                 image: 'image_URL',
                 url: 'album_URL'
             },
@@ -45,7 +46,7 @@ export default class AlbumDetail extends Component {
             let result;
             const redirectUrl = 'https://auth.expo.io/@kratky.pete/randomify';
             const clientID = '8a352836ac464579ab2e790ee597a703';
-            const scopes = 'user-modify-playback-state';
+            const scopes = 'user-modify-playback-state user-library-read';
             result = await AuthSession.startAsync({
               authUrl:
                 'https://accounts.spotify.com/authorize' +
@@ -107,29 +108,34 @@ export default class AlbumDetail extends Component {
       }
     };
 
-    componentDidMount() {
-        this.getTokens()
-            .then(() => {
-                sp.setAccessToken(this.state.tokens.accessToken);
-                console.log('sp.accessToken: ' + sp.getAccessToken());
-                this.fetchAlbum()
-                    .then(() => {
-                        this.fetchArtist();
-                    });
-            })
-    }
 
+    // generate random number from 0 to maxNum
     randomNum(maxNum) {
         return Math.floor(Math.random() * maxNum);
     }
 
+    // picks a random character from a-z/0-9 for api search query
     randomChar() {
         const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
         return chars.charAt(this.randomNum(chars.length));
     };
 
+
+    fetchRandomAlbum = async() => {
+        const offset = this.randomNum(10000);
+        await sp.searchAlbums(this.randomChar(), {limit: 1, offset: offset, market: 'CZ'})
+            .then((response) => {
+                console.log('RandomAlbumID:' + response.albums.items[0].id);
+                this.setState({ album: {
+                    id: response.albums.items[0].id,
+                    }
+                })
+            });
+        };
+
+
     fetchAlbum = async() => {
-        await sp.getAlbum('2FUsvD1bw53HGOjAg56vRD')
+        await sp.getAlbum(this.state.album.id)
             .then((response) => {
                 this.setState({ album: {
                         name: response.name,
@@ -152,6 +158,28 @@ export default class AlbumDetail extends Component {
                     }
                 });
             });
+    }
+
+    // load new random album onto screen
+    refreshAlbum() {
+        this.fetchRandomAlbum()
+            .then(() => {
+                this.fetchAlbum()
+                    .then(() => {
+                        this.fetchArtist()
+                    })
+            });
+    }
+
+    componentDidMount() {
+        // request new access token upon app launch
+        this.getTokens()
+            .then(() => {
+                // set access token for active spotify api session (active for 6 minutes)
+                sp.setAccessToken(this.state.tokens.accessToken);
+                // load first random album on app launch
+                this.refreshAlbum();
+            })
     }
 
     render() {
@@ -197,7 +225,7 @@ export default class AlbumDetail extends Component {
                         <Button whenPressed={() => { Linking.openURL(album.url); }}>
                             Listen on Spotify
                         </Button>
-                        <Button whenPressed={() => { console.log(this.randomChar()) }} >
+                        <Button whenPressed={() => {  }} >
                             debug button
                         </Button>
                     </CardSection>
@@ -205,7 +233,7 @@ export default class AlbumDetail extends Component {
                 <View style={randomButtonStyle}>
                     <RandomButton
                         buttonText={'randomify'}
-                        whenPressed={() => this.fetchAlbum()}
+                        whenPressed={() => this.refreshAlbum()}
                     />
                 </View>
             </View>
