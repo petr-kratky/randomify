@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+// reusable CardSection component used for displaying specific album details
+
 const CardSection = (props) => {
     return (
         <View style={styles.containerStyle}>

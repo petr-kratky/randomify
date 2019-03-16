@@ -1,9 +1,8 @@
-// Import libs
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
+// standalone RandomButton component used to 'randomify' albums; implemented with <TouchableOpacity>
 
-// Define a component
 const RandomButton = ({ buttonText, whenPressed }) => {
     const { textStyle, viewStyle } = styles;
     
@@ -39,6 +38,5 @@ const styles = {
   }
 };
 
-// Make the component available to other parts of app
 export default RandomButton;
 

@@ -2,6 +2,8 @@ import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import { Font } from 'expo';
 
+// reusable Button component using <TouchableOpacity>
+
 const Button = ({ whenPressed, children }) => {
     const { buttonStyle, textStyle } = styles;
 

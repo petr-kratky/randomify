@@ -1,9 +1,9 @@
-// Import libs
 import React, {Component} from 'react';
 import Spotify from 'spotify-web-api-js';
 import {Image, Linking, Text, View} from 'react-native';
 import { AuthSession } from 'expo';
 import { encode as btoa } from 'base-64'
+
 import Card from './Card';
 import CardSection from './CardSection';
 import Button from './Button';

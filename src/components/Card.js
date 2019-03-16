@@ -1,8 +1,8 @@
-// Import libs
 import React from 'react';
 import { View } from 'react-native';
 
-// Define a component
+// album Card component which servers as a container for album information
+
 const Card = (props) => {
     return (
         <View style={styles.containerStyle}>
@@ -29,5 +29,4 @@ const styles = {
     }
 };
 
-// Make the component available to other parts of app
 export default Card;
