@@ -272,9 +272,6 @@ export default class AlbumDetail extends Component {
                         <Button whenPressed={() => { Linking.openURL(album.url); }}>
                             Listen on Spotify
                         </Button>
-                        <Button whenPressed={() => {  }} >
-                            debug button
-                        </Button>
                     </CardSection>
                 </Card>
                 <View style={randomButtonStyle}>
