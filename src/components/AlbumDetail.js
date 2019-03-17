@@ -309,6 +309,7 @@ const styles = {
         justifyContent: 'space-around',
     },
     headerTextStyle: {
+        maxWidth: 260,
         fontSize: 18,
         fontFamily: 'aileron-bold',
         color: '#fff',
