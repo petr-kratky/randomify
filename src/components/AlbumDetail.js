@@ -311,7 +311,7 @@ const styles = {
     headerTextStyle: {
         maxWidth: 260,
         fontSize: 18,
-        fontFamily: 'aileron-bold',
+        fontFamily: 'aileron-semibold',
         color: '#fff',
     },
     artistTextStyle: {
@@ -338,6 +338,8 @@ const styles = {
     },
 
     buttonTextStyle: {
+        // letterSpacing: 1,
+        fontFamily: 'aileron-light',
         alignSelf: 'center',
         color: '#fff',
         fontSize: 17,

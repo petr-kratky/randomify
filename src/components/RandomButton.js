@@ -16,19 +16,21 @@ const RandomButton = ({ children, whenPressed }) => {
 const styles = {
 
   viewStyle: {
-      backgroundColor: '#232323',
-      justifyContent: 'flex-start',
+      backgroundColor: '#18b856',
+      justifyContent: 'center',
       alignItems: 'center',
       alignSelf: 'center',
-      height: 100,
-      width: 390,
+      height: 60,
+      width: 325,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: -2 },
-      shadowOpacity: 1,
+      shadowOpacity: 0.5,
       elevation: 5,
       position: 'absolute',
-      bottom: -40,
+      bottom: 20,
       borderRadius: 50,
+      // borderWidth: 0.5,
+      // borderColor: '#232323'
   }
 };
 

@@ -19,7 +19,7 @@ export default class App extends Component {
     */
 
     loadFonts = async() => {
-        await Font.loadAsync({'aileron-black': require('./assets/fonts/Aileron-Black-webfont.ttf'),});
+        await Font.loadAsync({'aileron-heavy': require('./assets/fonts/Aileron-Heavy-webfont.ttf'),});
         this.setState({ fontsLoaded: true });
     };
 
@@ -45,7 +45,7 @@ export default class App extends Component {
             <View style={mainStyle}>
                 <AlbumDetail ref={(AlbumDetail) => {this.AlbumDetail = AlbumDetail;} } />
                 <RandomButton whenPressed={() => {this.AlbumDetail.refreshAlbum()}}>
-                    <Text style={randomButtonTextStyle}>&#60; RANDOMIFY &#62;</Text>
+                    <Text style={randomButtonTextStyle}>RANDOMIFY</Text>
                 </RandomButton>
             </View>
         );
@@ -58,13 +58,13 @@ const styles = {
         backgroundColor: '#343434',
     },
     randomButtonTextStyle: {
-        marginTop: 7,
-        fontFamily: 'aileron-black',
-        fontSize: 42,
-        color: '#20C778',
-        textShadowColor: '#fff',
-        textShadowOffset: { width: 1.2, height: 1.2 },
-        textShadowRadius: 2,
+        letterSpacing: 3,
+        fontFamily: 'aileron-heavy',
+        fontSize: 32,
+        color: '#fff',
+        // textShadowColor: '#fff',
+        // textShadowOffset: { width: 1.2, height: 1.2 },
+        // textShadowRadius: 2,
   },
 };
 
