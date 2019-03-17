@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import Spotify from 'spotify-web-api-js';
 import {Image, Linking, Text, View} from 'react-native';
+
+import Spotify from 'spotify-web-api-js';
 import { AuthSession, Font } from 'expo';
 import { encode as btoa } from 'base-64'
-
 
 import Card from './Card';
 import CardSection from './CardSection';
 import Button from './Button';
-import RandomButton from './RandomButton';
 
 const sp = new Spotify(); // create new spotify api session, later used to make calls
 
@@ -264,8 +263,6 @@ export default class AlbumDetail extends Component {
             headerTextStyle,
             imageStyle,
             artistTextStyle,
-            randomButtonStyle,
-            randomButtonTextStyle,
             buttonTextStyle
         } = styles;
 
@@ -300,11 +297,7 @@ export default class AlbumDetail extends Component {
                         </Button>
                     </CardSection>
                 </Card>
-                <View style={randomButtonStyle}>
-                    <RandomButton whenPressed={() => this.refreshAlbum()}>
-                        <Text style={randomButtonTextStyle}>RANDOMIFY</Text>
-                    </RandomButton>
-                </View>
+
             </View>
         );
     }
@@ -342,19 +335,7 @@ const styles = {
         width: null,
         borderRadius: 5
     },
-    randomButtonStyle: {
-        justifyContent: 'flex-end',
-        alignSelf: 'center',
-        marginTop: 37
-    },
-    randomButtonTextStyle: {
-        fontFamily: 'aileron-black',
-        fontSize: 47,
-        color: '#20C778',
-        textShadowColor: '#fff',
-        textShadowOffset: { width: 1.2, height: 1.2 },
-        textShadowRadius: 2,
-  },
+
     buttonTextStyle: {
         alignSelf: 'center',
         color: '#fff',
