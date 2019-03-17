@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import Spotify from 'spotify-web-api-js';
 import {Image, Linking, Text, View} from 'react-native';
-import { AuthSession } from 'expo';
+import { AuthSession, Font } from 'expo';
 import { encode as btoa } from 'base-64'
+
 
 import Card from './Card';
 import CardSection from './CardSection';
@@ -16,6 +17,7 @@ export default class AlbumDetail extends Component {
         super();
 
         this.state = {
+            fontsLoaded: false,
             tokens: {
                 accessToken: 'no_access_token', // access token required by api calls
                 refreshToken: 'no_refresh_token', // token to refresh (obtain new) access token wo user interference
@@ -214,6 +216,19 @@ export default class AlbumDetail extends Component {
     }
 
     /*
+    @loadFonts:
+        loads custom fonts via async call and re-renders screen
+    */
+
+    loadFonts = async() => {
+        await Font.loadAsync({'aileron-semibold': require('../../assets/fonts/Aileron-SemiBold-webfont.ttf'),});
+        await Font.loadAsync({'aileron-light':    require('../../assets/fonts/Aileron-Light-webfont.ttf'),});
+        await Font.loadAsync({'aileron-bold':    require('../../assets/fonts/Aileron-Bold-webfont.ttf'),});
+        await Font.loadAsync({'aileron-black':    require('../../assets/fonts/Aileron-Black-webfont.ttf'),});
+        this.setState({ fontsLoaded: true });
+    };
+
+    /*
     @componentDidMount:
         requests access token for spotify api requests upon App launch via @getTokens()
         set access token for active spotify api session (active for 6 minutes)
@@ -221,6 +236,8 @@ export default class AlbumDetail extends Component {
     */
 
     componentDidMount() {
+        this.loadFonts();
+
         this.getTokens()
             .then(() => {
                 sp.setAccessToken(this.state.tokens.accessToken);
@@ -229,6 +246,14 @@ export default class AlbumDetail extends Component {
     }
 
     render() {
+        if(!this.state.fontsLoaded) {
+            return (
+                <View>
+                    <Text>Loading fonts..</Text>
+                </View>
+            );
+        }
+
         const album = this.state.album;
         const artist = this.state.artist;
 
@@ -239,7 +264,9 @@ export default class AlbumDetail extends Component {
             headerTextStyle,
             imageStyle,
             artistTextStyle,
-            randomButtonStyle
+            randomButtonStyle,
+            randomButtonTextStyle,
+            buttonTextStyle
         } = styles;
 
         if (album == null) {
@@ -269,15 +296,14 @@ export default class AlbumDetail extends Component {
                     </CardSection>
                     <CardSection>
                         <Button whenPressed={() => { Linking.openURL(album.url); }}>
-                            Listen on Spotify
+                            <Text style={buttonTextStyle}>Listen on Spotify</Text>
                         </Button>
                     </CardSection>
                 </Card>
                 <View style={randomButtonStyle}>
-                    <RandomButton
-                        buttonText={'randomify'}
-                        whenPressed={() => this.refreshAlbum()}
-                    />
+                    <RandomButton whenPressed={() => this.refreshAlbum()}>
+                        <Text style={randomButtonTextStyle}>RANDOMIFY</Text>
+                    </RandomButton>
                 </View>
             </View>
         );
@@ -291,11 +317,11 @@ const styles = {
     },
     headerTextStyle: {
         fontSize: 18,
-        // fontFamily: 'Aileron-SemiBold',
+        fontFamily: 'aileron-bold',
         color: '#fff',
     },
     artistTextStyle: {
-        // fontFamily: 'Aileron-Light',
+        fontFamily: 'aileron-light',
         color: '#fff'
     },
     thumbnailStyle: {
@@ -311,7 +337,7 @@ const styles = {
         backgroundColor: '#232323'
     },
     imageStyle: {
-        height: 320,
+        height: 335,
         flex: 1,
         width: null,
         borderRadius: 5
@@ -320,5 +346,21 @@ const styles = {
         justifyContent: 'flex-end',
         alignSelf: 'center',
         marginTop: 37
+    },
+    randomButtonTextStyle: {
+        fontFamily: 'aileron-black',
+        fontSize: 47,
+        color: '#20C778',
+        textShadowColor: '#fff',
+        textShadowOffset: { width: 1.2, height: 1.2 },
+        textShadowRadius: 2,
+  },
+    buttonTextStyle: {
+        alignSelf: 'center',
+        color: '#fff',
+        fontSize: 17,
+        fontWeight: '600',
+        paddingTop: 10,
+        paddingBottom: 10
     }
 };

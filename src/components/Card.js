@@ -24,7 +24,7 @@ const styles = {
         elevation: 10,
         marginLeft: 10,
         marginRight: 10,
-        marginTop: 20,
+        marginTop: 40,
         backgroundColor: '#232323',
     }
 };

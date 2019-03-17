@@ -1,28 +1,20 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 // standalone RandomButton component used to 'randomify' albums; implemented with <TouchableOpacity>
 
-const RandomButton = ({ buttonText, whenPressed }) => {
-    const { textStyle, viewStyle } = styles;
+const RandomButton = ({ children, whenPressed }) => {
+    const { viewStyle } = styles;
     
     return (
         <TouchableOpacity style={viewStyle} onPress={whenPressed}>
-            <Text style={textStyle}>{buttonText.toUpperCase()}</Text>
+            {children}
         </TouchableOpacity>
     );
 };
 
 const styles = {
-  textStyle: {
-      // fontFamily: 'Aileron-Black',
-      fontSize: 47,
-      color: '#20C778',
-      textShadowColor: '#fff',
-      textShadowOffset: { width: 1.2, height: 1.2 },
-      textShadowRadius: 2
 
-  },
   viewStyle: {
       backgroundColor: '#232323',
       justifyContent: 'center',
@@ -34,7 +26,7 @@ const styles = {
       shadowOpacity: 1,
       elevation: 5,
       position: 'relative',
-      borderRadius: 15,
+      borderRadius: 50,
   }
 };
 

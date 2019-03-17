@@ -1,17 +1,14 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { Font } from 'expo';
+import { TouchableOpacity } from 'react-native';
 
 // reusable Button component using <TouchableOpacity>
 
 const Button = ({ whenPressed, children }) => {
-    const { buttonStyle, textStyle } = styles;
+    const { buttonStyle } = styles;
 
     return (
         <TouchableOpacity style={buttonStyle} onPress={whenPressed}>
-            <Text style={textStyle}>
-                {children}
-            </Text>
+            {children}
         </TouchableOpacity>
     );
 };
@@ -28,15 +25,6 @@ const styles = {
         marginRight: 0,
         marginBottom: 3
     },
-    textStyle: {
-        alignSelf: 'center',
-        // fontFamily: 'Aileron-Bold',
-        color: '#fff',
-        fontSize: 17,
-        fontWeight: '600',
-        paddingTop: 10,
-        paddingBottom: 10
-    }
 };
 
 export default Button;

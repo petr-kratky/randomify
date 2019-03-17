@@ -15,7 +15,7 @@ export default class App extends Component {
 const styles = {
     mainStyle: {
         flex: 1,
-        backgroundColor: '#30312e'
+        backgroundColor: '#343434'
     },
 };
 
