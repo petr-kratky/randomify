@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import AlbumDetail from './src/components/AlbumDetail';
 import RandomButton from "./src/components/RandomButton";
-import { Font } from "expo";
+import { Font, LinearGradient } from "expo";
 
 export default class App extends Component {
     constructor() {
@@ -43,10 +43,16 @@ export default class App extends Component {
 
         return (
             <View style={mainStyle}>
+                <LinearGradient
+                    colors={['#444', '#393939', '#111']}
+                    start={[0.4, 0.1]}
+                    style={{flex: 1}}
+                >
                 <AlbumDetail ref={(AlbumDetail) => {this.AlbumDetail = AlbumDetail;} } />
                 <RandomButton whenPressed={() => {this.AlbumDetail.refreshAlbum()}}>
                     <Text style={randomButtonTextStyle}>RANDOMIFY</Text>
                 </RandomButton>
+                </LinearGradient>
             </View>
         );
     }
