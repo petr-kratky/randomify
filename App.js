@@ -38,16 +38,13 @@ export default class App extends Component {
 
         const {
             mainStyle,
-            randomButtonStyle,
             randomButtonTextStyle
         } = styles;
 
         return (
             <View style={mainStyle}>
                 <AlbumDetail ref={(AlbumDetail) => {this.AlbumDetail = AlbumDetail;} } />
-                <RandomButton
-                    style={randomButtonStyle}
-                    whenPressed={() => {this.AlbumDetail.refreshAlbum()}}>
+                <RandomButton whenPressed={() => {this.AlbumDetail.refreshAlbum()}}>
                     <Text style={randomButtonTextStyle}>RANDOMIFY</Text>
                 </RandomButton>
             </View>
@@ -58,12 +55,7 @@ export default class App extends Component {
 const styles = {
     mainStyle: {
         flex: 1,
-        backgroundColor: '#343434'
-    },
-    randomButtonStyle: {
-        justifyContent: 'flex-end',
-        alignSelf: 'center',
-        marginTop: 37
+        backgroundColor: '#343434',
     },
     randomButtonTextStyle: {
         fontFamily: 'aileron-black',

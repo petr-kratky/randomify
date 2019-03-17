@@ -19,13 +19,15 @@ const styles = {
       backgroundColor: '#232323',
       justifyContent: 'center',
       alignItems: 'center',
+      alignSelf: 'center',
       height: 70,
       width: 341,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: -2 },
       shadowOpacity: 1,
       elevation: 5,
-      position: 'relative',
+      position: 'absolute',
+      bottom: 25,
       borderRadius: 50,
   }
 };
