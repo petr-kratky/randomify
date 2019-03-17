@@ -52,18 +52,19 @@ export default class AlbumDetail extends Component {
     getAuthorizationCode = async () => {
         try {
             let result;
-            const redirectUrl = 'https://auth.expo.io/@kratky.pete/randomify';
+            const redirectUrl = AuthSession.getRedirectUrl();
             const clientID = '8a352836ac464579ab2e790ee597a703';
             const scopes = ''; //
             result = await AuthSession.startAsync({
-              authUrl:
-                'https://accounts.spotify.com/authorize' +
-                '?response_type=code' +
-                '&client_id=' +
-                clientID +
-                (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-                '&redirect_uri=' +
-                encodeURIComponent(redirectUrl),
+                behavior: 'web',
+                authUrl:
+                    'https://accounts.spotify.com/authorize' +
+                    '?response_type=code' +
+                    '&client_id=' +
+                    clientID +
+                    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+                    '&redirect_uri=' +
+                    encodeURIComponent(redirectUrl),
             });
             return result.params.code;
         } catch (err) {
@@ -91,7 +92,7 @@ export default class AlbumDetail extends Component {
         const credentials = {
             clientId: '8a352836ac464579ab2e790ee597a703',
             clientSecret: 'ae0d353236ff4dd780b32670fb55f97a',
-            redirectUri: 'https://auth.expo.io/@kratky.pete/randomify'
+            redirectUri: AuthSession.getRedirectUrl()
         };
         const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
         const response = await fetch('https://accounts.spotify.com/api/token', {
