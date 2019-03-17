@@ -45,7 +45,7 @@ export default class App extends Component {
             <View style={mainStyle}>
                 <AlbumDetail ref={(AlbumDetail) => {this.AlbumDetail = AlbumDetail;} } />
                 <RandomButton whenPressed={() => {this.AlbumDetail.refreshAlbum()}}>
-                    <Text style={randomButtonTextStyle}>RANDOMIFY</Text>
+                    <Text style={randomButtonTextStyle}>&#60; RANDOMIFY &#62;</Text>
                 </RandomButton>
             </View>
         );
@@ -58,8 +58,9 @@ const styles = {
         backgroundColor: '#343434',
     },
     randomButtonTextStyle: {
+        marginTop: 7,
         fontFamily: 'aileron-black',
-        fontSize: 47,
+        fontSize: 42,
         color: '#20C778',
         textShadowColor: '#fff',
         textShadowOffset: { width: 1.2, height: 1.2 },

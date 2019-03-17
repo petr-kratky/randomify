@@ -17,17 +17,17 @@ const styles = {
 
   viewStyle: {
       backgroundColor: '#232323',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       alignItems: 'center',
       alignSelf: 'center',
-      height: 70,
-      width: 341,
+      height: 100,
+      width: 390,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: -2 },
       shadowOpacity: 1,
       elevation: 5,
       position: 'absolute',
-      bottom: 25,
+      bottom: -40,
       borderRadius: 50,
   }
 };
