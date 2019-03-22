@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 12208,
+  "expoServerNgrokUrl": "https://wu-nay.kratky-pete.randomify.exp.direct",
+  "packagerNgrokUrl": "https://packager.wu-nay.kratky-pete.randomify.exp.direct",
+  "ngrokPid": 8492,
   "webpackServerPort": null
 }
