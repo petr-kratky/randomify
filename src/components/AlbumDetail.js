@@ -170,14 +170,6 @@ export default class AlbumDetail extends Component {
     }
 
     render() {
-        if(!this.state.fontsLoaded) {
-            return (
-                <View>
-                    <Text>Loading fonts..</Text>
-                </View>
-            );
-        }
-
         const album = this.state.album;
         const artist = this.state.artist;
 
@@ -191,40 +183,45 @@ export default class AlbumDetail extends Component {
             buttonTextStyle
         } = styles;
 
-        if (album == null) {
-            return <View><Text>Loading...</Text></View>;
-        }
+        if (!this.state.fontsLoaded) {
+            return <View><Text>Loading fonts..</Text></View>
 
-        return (
-            <View>
-                <Card>
-                    <CardSection>
-                        <View style={thumbnailContainerStyle}>
+        } else if (album == null) {
+            return <View><Text>Loading album..</Text></View>;
+
+        } else {
+            return (
+                <View>
+                    <Card>
+                        <CardSection>
+                            <View style={thumbnailContainerStyle}>
+                                <Image
+                                    style={thumbnailStyle}
+                                    source={{uri: artist.thumbnail}}
+                                />
+                            </View>
+                            <View style={headerContentStyle}>
+                                <Text style={headerTextStyle}>{album.name}</Text>
+                                <Text style={artistTextStyle}>{album.artist}</Text>
+                            </View>
+                        </CardSection>
+                        <CardSection>
                             <Image
-                                style={thumbnailStyle}
-                                source={{ uri: artist.thumbnail }}
+                                style={imageStyle}
+                                source={{uri: album.image}}
                             />
-                        </View>
-                        <View style={headerContentStyle}>
-                            <Text style={headerTextStyle}>{album.name}</Text>
-                            <Text style={artistTextStyle}>{album.artist}</Text>
-                        </View>
-                    </CardSection>
-                    <CardSection>
-                        <Image
-                            style={imageStyle}
-                            source={{ uri: album.image }}
-                        />
-                    </CardSection>
-                    <CardSection>
-                        <Button whenPressed={() => { Linking.openURL(album.url); }}>
-                            <Text style={buttonTextStyle}>Listen on Spotify</Text>
-                        </Button>
-                    </CardSection>
-                </Card>
-
-            </View>
-        );
+                        </CardSection>
+                        <CardSection>
+                            <Button whenPressed={() => {
+                                Linking.openURL(album.url);
+                            }}>
+                                <Text style={buttonTextStyle}>Listen on Spotify</Text>
+                            </Button>
+                        </CardSection>
+                    </Card>
+                </View>
+            );
+        }
     }
 }
 
@@ -263,7 +260,6 @@ const styles = {
     },
 
     buttonTextStyle: {
-        // letterSpacing: 1,
         fontFamily: 'aileron-light',
         alignSelf: 'center',
         color: '#fff',
