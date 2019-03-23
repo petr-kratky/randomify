@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image, Linking, Text, View} from 'react-native';
 
 import Spotify from 'spotify-web-api-js';
-import { Font } from 'expo';
+import {Font} from 'expo';
 
 import Card from './Card';
 import CardSection from './CardSection';
@@ -50,6 +50,21 @@ export default class AlbumDetail extends Component {
     };
 
     /*
+    @cutString:
+        checks if input string is within the maxLength
+            => if not, it cuts the string to the required length and appends '...'
+            => if yes, it returns the original string
+    */
+
+    static cutString(str, maxLength) {
+        if (str.length > maxLength) {
+            return str.substring(0, maxLength) + '...';
+        } else {
+            return str;
+        }
+    }
+
+    /*
     @fetchRandomAlbum:
          fetches random album from spotify api
          generates random offset; spotify api will then return an album from search query based on that offset number
@@ -78,7 +93,7 @@ export default class AlbumDetail extends Component {
         await sp.getAlbum(this.state.album.id)
             .then((response) => {
                 this.setState({ album: {
-                        name: response.name,
+                        name: AlbumDetail.cutString(response.name, 90),
                         url: response.uri,
                         image: response.images[0].url,
                         artist: response.artists[0].name,
